@@ -5,6 +5,8 @@ import axios from 'axios';
 function AutocompleteSelect() {
     const [inputValue, setInputValue] = useState('');
     const [options, setOptions] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null); // State to store the selected option
+
 
     useEffect(() => {
         axios.get(`https://epsg.io/?format=json&trans=1&q=${inputValue}`)
@@ -23,15 +25,23 @@ function AutocompleteSelect() {
     const handleInputChange = newValue => {
         setInputValue(newValue);
     };
+    const handleChange = selected => {
+        setSelectedOption(selected); // Update the state with the new selected option
+    };
 
     return (
-        <Select
-            inputValue={inputValue}
-            onInputChange={handleInputChange}
-            options={options}
-            placeholder="Enter a code..."
-            isClearable="true"
-        />
+        <div>
+
+            <Select
+                inputValue={inputValue}
+                onInputChange={handleInputChange}
+                onChange={handleChange}
+                options={options}
+                placeholder="Enter a code..."
+                isClearable="true"
+            />
+            {selectedOption && <h2> {selectedOption.label}</h2>} 
+        </div>
     );
 }
 
